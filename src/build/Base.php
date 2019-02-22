@@ -139,4 +139,49 @@ class Base
         return true;
     }
 
+    /**
+     * 复制文件
+     * @param $file
+     * @param $to
+     * @return bool
+     */
+    public function copyFile($file, $to)
+    {
+        if (!is_file($file)) {
+            return false;
+        }
+        //创建目录
+        $this->create(dirname($to));
+        return copy($file, $to);
+    }
+
+    /**
+     * 移动目录
+     * @param $old
+     * @param $new
+     * @return bool
+     */
+    public function move($old, $new)
+    {
+        if ($this->copy($old, $new)) {
+            return $this->del($old);
+        }
+    }
+
+    /**
+     * 移动文件
+     * @param $file
+     * @param $dir
+     * @return bool
+     */
+    public function moveFile($file, $dir)
+    {
+        is_dir($dir) or mkdir($dir, 0755, true);
+        if (is_file($file) && is_dir($dir)) {
+            copy($file, $dir . '/' . basename($file));
+            return unlink($file);
+        }
+    }
+
+
 }
