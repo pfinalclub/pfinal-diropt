@@ -42,7 +42,7 @@ class Base
     public function create($dir, $auth = 0755)
     {
         if (!empty($dir)) {
-            if (file_exists($dir)) die('directory already exists');
+            if (file_exists($dir)) die("directory already exists\n");
             return is_dir($dir) or mkdir($dir, $auth, true);
         } else {
             die('Parameter error');
@@ -150,8 +150,9 @@ class Base
         if (!is_file($file)) {
             return false;
         }
-        //创建目录
-        $this->create(dirname($to));
+        if (!file_exists(dirname($to))) {
+            $this->create(dirname($to));
+        }
         return copy($file, $to);
     }
 
