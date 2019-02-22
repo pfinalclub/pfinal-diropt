@@ -75,4 +75,68 @@ class Base
         }
         return $list;
     }
+
+    /**
+     * 获取目录大小
+     * @param $dir
+     * @return int
+     */
+    public function size($dir)
+    {
+        $s = 0;
+        if (empty($dir)) return $s;
+        if (!file_exists($dir)) die('directory does not exist');
+        foreach (glob($dir . '/*') as $v) {
+            $s += is_file($v) ? filesize($v) : self::size($v);
+        }
+
+        return $s;
+    }
+
+    /**
+     * 删除文件
+     * @param $file
+     * @return bool
+     */
+    public function defFile($file)
+    {
+        if (is_file($file)) {
+            return unlink($file);
+        }
+        return true;
+    }
+
+    /**
+     * 删除目录
+     * @param $dir
+     * @return bool
+     */
+    public function del($dir)
+    {
+        if (!is_dir($dir)) {
+            return true;
+        }
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            (is_dir("$dir/$file")) ? $this->del("$dir/$file") : unlink("$dir/$file");
+        }
+        return rmdir($dir);
+    }
+
+    /**
+     * 复制目录
+     * @param $old
+     * @param $new
+     * @return bool
+     */
+    public function copy($old, $new)
+    {
+        is_dir($new) or mkdir($new, 0755, true);
+        foreach (glob($old . '/*') as $v) {
+            $to = $new . '/' . basename($v);
+            is_file($v) ? copy($v, $to) : $this->copy($v, $to);
+        }
+        return true;
+    }
+
 }
