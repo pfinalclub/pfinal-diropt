@@ -41,11 +41,8 @@ class Base
      */
     public function create($dir, $auth = 0755)
     {
-        if (!empty($dir)) {
-            if (file_exists($dir)) die("directory already exists\n");
+        if ( ! empty($dir)) {
             return is_dir($dir) or mkdir($dir, $auth, true);
-        } else {
-            die('Parameter error');
         }
     }
 
