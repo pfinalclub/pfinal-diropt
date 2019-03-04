@@ -95,7 +95,7 @@ class Base
      * @param $file
      * @return bool
      */
-    public function defFile($file)
+    public function delFile($file)
     {
         if (is_file($file)) {
             return unlink($file);
